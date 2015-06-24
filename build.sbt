@@ -6,6 +6,8 @@ autoScalaLibrary in ThisBuild := false // no dependency to Scala standard librar
 
 crossPaths in ThisBuild := false
 
+javacOptions in (Compile, doc) := Nil
+
 javacOptions ++= Seq("-source", "1.8", "-target", "1.8")
 
 resolvers += Resolver.sonatypeRepo("snapshots")
