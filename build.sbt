@@ -26,3 +26,5 @@ libraryDependencies ++=
 lazy val `sphere-jvm-sdk-experimental-java-add-ons` = (project in file(".")).configs(IntegrationTest)
 
 Defaults.itSettings
+
+licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
