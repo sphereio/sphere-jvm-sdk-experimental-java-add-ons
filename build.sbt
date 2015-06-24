@@ -2,8 +2,6 @@ name := "sphere-jvm-sdk-experimental-java-add-ons"
 
 organization := "io.sphere.sdk.jvm"
 
-version := "0.1.0-SNAPSHOT"
-
 autoScalaLibrary in ThisBuild := false // no dependency to Scala standard library
 
 crossPaths in ThisBuild := false
