@@ -14,7 +14,7 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 
 resolvers += Resolver.sonatypeRepo("releases")
 
-val jvmSdkVersion = "1.0.0-M15-SNAPSHOT"
+val jvmSdkVersion = "1.0.0-M15"
 
 libraryDependencies ++=
   ("io.sphere.sdk.jvm" % "sphere-models" % jvmSdkVersion withSources()) ::
