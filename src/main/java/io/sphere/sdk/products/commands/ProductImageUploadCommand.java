@@ -16,17 +16,15 @@ public class ProductImageUploadCommand extends CommandImpl<Product> {
     private final String productId;
     private final int variantId;
     private final Optional<String> filename;
-    private final ProductUpdateScope productUpdateScope;
     private final File img;
     private final String contentType;
 
     private ProductImageUploadCommand(final String productId, final int variantId,
-                                      final Optional<String> filename, final ProductUpdateScope productUpdateScope,
+                                      final Optional<String> filename,
                                       final String contentType, final File img) {
         this.productId = productId;
         this.variantId = variantId;
         this.filename = filename;
-        this.productUpdateScope = productUpdateScope;
         this.img = img;
         this.contentType = contentType;
     }
@@ -38,35 +36,33 @@ public class ProductImageUploadCommand extends CommandImpl<Product> {
 
     @Override
     public HttpRequestIntent httpRequestIntent() {
-        final String path = format("/products/%s/images?variant=%d%s&staged=%s", productId, variantId, filename.map(s -> "&filename="+s).orElse(""), productUpdateScope.isOnlyStaged().toString());
+        final String path = format("/products/%s/images?variant=%d%s", productId, variantId, filename.map(s -> "&filename="+s).orElse(""));
         return HttpRequestIntent.of(HttpMethod.POST, path, img, contentType);
     }
 
-    public static ProductImageUploadCommand of(final ImageDraft draft,  final VariantIdentifier variantIdentifier, final ProductUpdateScope productUpdateScope) {
-        return of(draft, variantIdentifier.getProductId(), variantIdentifier.getVariantId(), productUpdateScope);
+    public static ProductImageUploadCommand of(final ImageDraft draft,  final VariantIdentifier variantIdentifier) {
+        return of(draft, variantIdentifier.getProductId(), variantIdentifier.getVariantId());
     }
 
-    public static ProductImageUploadCommand of(final ImageDraft draft,  final Identifiable<Product> productIdentifiable, final int variantId, final ProductUpdateScope productUpdateScope) {
-        return of(draft, productIdentifiable.getId(), variantId, productUpdateScope);
+    public static ProductImageUploadCommand of(final ImageDraft draft,  final Identifiable<Product> productIdentifiable, final int variantId) {
+        return of(draft, productIdentifiable.getId(), variantId);
     }
 
-    public static ProductImageUploadCommand of(final ImageDraft draft,  final String productId, final int variantId, final ProductUpdateScope productUpdateScope) {
-        return new ProductImageUploadCommand(productId, variantId, draft.getFilename(), productUpdateScope, draft.getContentType(), draft.getImg());
+    public static ProductImageUploadCommand of(final ImageDraft draft,  final String productId, final int variantId) {
+        return new ProductImageUploadCommand(productId, variantId, draft.getFilename(), draft.getContentType(), draft.getImg());
     }
 
     @Deprecated
     public static ProductImageUploadCommand of(final String productId, final int variantId,
                                                            final Optional<String> filename,
-                                                           final ProductUpdateScope productUpdateScope,
                                                            final String contentType, final File img) {
-        return new ProductImageUploadCommand(productId, variantId, filename, productUpdateScope, contentType, img);
+        return new ProductImageUploadCommand(productId, variantId, filename, contentType, img);
     }
 
     @Deprecated
     public static ProductImageUploadCommand of(final Identifiable<Product> product, final int variantId,
                                                            final Optional<String> filename,
-                                                           final ProductUpdateScope productUpdateScope,
                                                            final String contentType, final File img) {
-        return of(product.getId(), variantId, filename, productUpdateScope, contentType, img);
+        return of(product.getId(), variantId, filename, contentType, img);
     }
 }

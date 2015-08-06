@@ -14,7 +14,7 @@ public abstract class WithSphereClient {
     @BeforeClass
     public static void setUp() throws Exception {
         final SphereClientConfig config = SphereClientConfig.ofEnvironmentVariables("SPHERE_JVM_SDK_EXPERIMENTAL_JAVA_ADDONS");
-        client = SphereClientFactory.of().createClient(config);
+        client = SphereClientFactory.of(SphereAsyncHttpClientFactory::create).createClient(config);
     }
 
     @AfterClass

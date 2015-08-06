@@ -1,8 +1,7 @@
 package io.sphere.sdk.products.commands;
 
 import io.sphere.sdk.client.WithSphereClient;
-import io.sphere.sdk.models.Image;
-import io.sphere.sdk.models.LocalizedStrings;
+import io.sphere.sdk.models.LocalizedString;
 import io.sphere.sdk.products.*;
 import io.sphere.sdk.producttypes.ProductType;
 import io.sphere.sdk.producttypes.ProductTypeDraft;
@@ -28,7 +27,7 @@ public class ProductImageUploadTest extends WithSphereClient {
         final String randomPartInImageName = RandomStringUtils.randomAlphanumeric(32);
         final String imageName = randomPartInImageName + ".gif";
         assertThat(product.getMasterVariant().getImages()).isEmpty();
-        final ProductImageUploadCommand uploadCommand = ProductImageUploadCommand.of(ImageDraft.ofGif(getImage()).withFileName(imageName), product.getId(), 1, ProductUpdateScope.ONLY_STAGED);
+        final ProductImageUploadCommand uploadCommand = ProductImageUploadCommand.of(ImageDraft.ofGif(getImage()).withFileName(imageName), product.getId(), 1);
         final Product updatedProduct = client().execute(uploadCommand).toCompletableFuture().join();
 
         final Image image = updatedProduct.getMasterData().getStaged().getMasterVariant().getImages().get(0);
@@ -44,10 +43,10 @@ public class ProductImageUploadTest extends WithSphereClient {
     private CompletionStage<ProductProjection> createProduct() {
         return productType().thenCompose(productType -> {
             final ProductDraft productDraft =
-                    ProductDraftBuilder.of(productType, LocalizedStrings.ofEnglishLocale("test"),
-                            LocalizedStrings.ofEnglishLocale(RandomStringUtils.randomAlphanumeric(32)), MASTER_VARIANT)
+                    ProductDraftBuilder.of(productType, LocalizedString.ofEnglishLocale("test"),
+                            LocalizedString.ofEnglishLocale(RandomStringUtils.randomAlphanumeric(32)), MASTER_VARIANT)
                             .build();
-            return client().execute(ProductCreateCommand.of(productDraft)).thenApply(product -> product.toProjection(ProductProjectionType.STAGED).get());
+            return client().execute(ProductCreateCommand.of(productDraft)).thenApply(product -> product.toProjection(ProductProjectionType.STAGED));
         });
     }
 
